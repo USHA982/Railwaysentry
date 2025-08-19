@@ -1,0 +1,27 @@
+
+import cv2
+import numpy as np
+import os
+
+app = (__name__)
+model = ("yolov9.pt")  # Replace with actual yolov9 path
+
+@app.route("/")
+def index():
+    return ("index.html")
+
+@app.route("/detect", methods=["POST"])
+def detect():
+    file = file["image"]
+    img_path = os.path.join("static", "uploaded.jpg")
+    file.save(img_path)
+
+    results = model(img_path)
+    annotated_frame = results[0].plot()
+    output_path = os.path.join("static", "output.jpg")
+    cv2.imwrite(output_path, annotated_frame)
+
+    return ({"output_url": output_path})
+
+if __name__ == "_main_":
+    app.run(debug=True)
